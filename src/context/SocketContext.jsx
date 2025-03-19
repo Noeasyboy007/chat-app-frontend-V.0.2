@@ -17,7 +17,8 @@ export const SocketContextProvider = ({ children }) => {
 	useEffect(() => {
 		if (authUser) {
 			// Use the environment variable with VITE_ prefix
-			const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+			// const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+			const backendUrl = "https://chat-app-backend-v-0-2.onrender.com";
 			
 			console.log("Connecting to socket server at:", backendUrl);
 			

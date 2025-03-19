@@ -1,10 +1,10 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useAuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const useSignup = () => {
 	const [loading, setLoading] = useState(false);
-	const { setAuthUser } = useAuthContext();
+	const navigate = useNavigate();
 
 	const signup = async ({ first_name, last_name, email, username, password, confirmPassword, gender }) => {
 		const success = handleInputErrors({ first_name, last_name, email, username, password, confirmPassword, gender });
@@ -23,12 +23,15 @@ const useSignup = () => {
 				throw new Error(data.error);
 			}
 
+			// Don't store user in localStorage or set authUser yet
+			// Wait until email verification is complete
+			
 			if (res.ok) {
-				toast.success('Signup successful');
+				toast.success('Signup successful! Please check your email for verification code.');
+				// Store email in sessionStorage for verification page
+				sessionStorage.setItem("pendingVerificationEmail", email);
+				navigate("/verify-otp");
 			}
-
-			localStorage.setItem("chat-user", JSON.stringify(data));
-			setAuthUser(data);
 		} catch (error) {
 			toast.error(error.message);
 		} finally {

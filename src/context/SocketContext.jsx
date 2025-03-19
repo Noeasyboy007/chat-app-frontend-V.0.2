@@ -2,6 +2,10 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { useAuthContext } from "./AuthContext";
 import io from "socket.io-client";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 const SocketContext = createContext();
 
@@ -16,7 +20,12 @@ export const SocketContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (authUser) {
-			const socket = io("http://localhost:8000/", {
+			// Use the environment variable with VITE_ prefix
+			const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+			
+			console.log("Connecting to socket server at:", backendUrl);
+			
+			const socket = io(backendUrl, {
 				query: {
 					userId: authUser._id,
 				},

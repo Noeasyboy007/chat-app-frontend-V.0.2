@@ -1,14 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useVerifyOtp from "../../hooks/useVerifyOtp";
+import useResendOtp from "../../hooks/useResendOtp";
 import toast from "react-hot-toast";
 
 const VerifyOtp = () => {
 	const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 	const [email, setEmail] = useState("");
+	const [resendDisabled, setResendDisabled] = useState(false);
+	const [countdown, setCountdown] = useState(0);
 	const { loading, verifyOtp } = useVerifyOtp();
+	const { loading: resendLoading, resendOtp } = useResendOtp();
 	const navigate = useNavigate();
 	const inputRefs = useRef([]);
+	const timerRef = useRef(null);
 
 	useEffect(() => {
 		// Initialize refs array
@@ -26,6 +31,10 @@ const VerifyOtp = () => {
 		if (inputRefs.current[0]) {
 			inputRefs.current[0].focus();
 		}
+
+		return () => {
+			if (timerRef.current) clearInterval(timerRef.current);
+		};
 	}, [navigate]);
 
 	const handleChange = (index, value) => {
@@ -72,6 +81,27 @@ const VerifyOtp = () => {
 			return;
 		}
 		await verifyOtp(otpString);
+	};
+
+	const handleResendOtp = async () => {
+		if (resendDisabled) return;
+		
+		await resendOtp(email);
+		
+		// Disable resend button for 60 seconds
+		setResendDisabled(true);
+		setCountdown(60);
+		
+		timerRef.current = setInterval(() => {
+			setCountdown(prev => {
+				if (prev <= 1) {
+					clearInterval(timerRef.current);
+					setResendDisabled(false);
+					return 0;
+				}
+				return prev - 1;
+			});
+		}, 1000);
 	};
 
 	return (
@@ -126,6 +156,21 @@ const VerifyOtp = () => {
 				<div className="mt-4 text-center">
 					<p>
 						Didn't receive a code?{" "}
+						<button
+							onClick={handleResendOtp}
+							disabled={resendDisabled || resendLoading}
+							className={`text-purple-500 hover:underline ${resendDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+						>
+							{resendLoading ? (
+								<span className="loading loading-spinner loading-xs"></span>
+							) : resendDisabled ? (
+								`Resend in ${countdown}s`
+							) : (
+								"Resend Code"
+							)}
+						</button>
+					</p>
+					<p className="mt-2">
 						<Link to="/login" className="text-purple-500 hover:underline">
 							Back to Login
 						</Link>

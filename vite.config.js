@@ -10,6 +10,8 @@ export default defineConfig({
       "/api":{
         // target:"http://localhost:8000",
         target:"https://chat-app-backend-voeo.onrender.com",
+        changeOrigin:true,
+        rewrite:(path)=>path.replace(/^\/api/,''),
 
       },
     },

@@ -12,7 +12,6 @@ const useLogin = () => {
 
 		setLoading(true);
 		try {
-			// Use the full backend URL from environment variable
 			const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 			const res = await fetch(`${backendUrl}/api/auth/login`, {
 				method: "POST",

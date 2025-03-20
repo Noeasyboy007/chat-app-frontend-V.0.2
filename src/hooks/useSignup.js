@@ -12,10 +12,12 @@ const useSignup = () => {
 
 		setLoading(true);
 		try {
-			const res = await fetch("/api/auth/signup", {
+			const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+			const res = await fetch(`${backendUrl}/api/auth/signup`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ first_name, last_name, email, username, password, confirmPassword, gender }),
+				credentials: "include",
 			});
 
 			const data = await res.json();
@@ -25,7 +27,7 @@ const useSignup = () => {
 
 			// Don't store user in localStorage or set authUser yet
 			// Wait until email verification is complete
-			
+
 			if (res.ok) {
 				toast.success('Signup successful! Please check your email for verification code.');
 				// Store email in sessionStorage for verification page
@@ -38,7 +40,7 @@ const useSignup = () => {
 			setLoading(false);
 		}
 	};
-	
+
 	return { loading, signup };
 };
 export default useSignup;

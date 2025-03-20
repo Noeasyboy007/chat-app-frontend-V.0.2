@@ -11,7 +11,6 @@ const useForgotPassword = () => {
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.error("Please enter a valid email address");
@@ -20,7 +19,8 @@ const useForgotPassword = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/forgot-password", {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+      const res = await fetch(`${backendUrl}/api/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

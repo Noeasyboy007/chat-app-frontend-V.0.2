@@ -24,7 +24,8 @@ const useResetPassword = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/auth/reset-password/${token}`, {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+      const res = await fetch(`${backendUrl}/api/auth/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),

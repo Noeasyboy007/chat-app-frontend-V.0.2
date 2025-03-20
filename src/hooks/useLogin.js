@@ -9,12 +9,16 @@ const useLogin = () => {
 	const login = async (email, password) => {
 		const success = handleInputErrors(email, password);
 		if (!success) return;
+
 		setLoading(true);
 		try {
-			const res = await fetch("/api/auth/login", {
+			// Use the full backend URL from environment variable
+			const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+			const res = await fetch(`${backendUrl}/api/auth/login`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ email, password }),
+				credentials: "include",
 			});
 
 			const data = await res.json();
@@ -37,6 +41,7 @@ const useLogin = () => {
 
 	return { loading, login };
 };
+
 export default useLogin;
 
 function handleInputErrors(email, password) {

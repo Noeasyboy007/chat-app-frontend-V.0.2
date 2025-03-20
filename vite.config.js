@@ -5,15 +5,24 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000,
-    proxy: { 
-      "/api":{
-        // target:"http://localhost:8000",
-        target:"https://chat-app-backend-voeo.onrender.com",
-        changeOrigin:true,
-        rewrite:(path)=>path.replace(/^\/api/,''),
-
+    proxy: {
+      // Proxy API requests to backend during development
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
       },
-    },
+      '/socket.io': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      }
+    }
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: true,
   },
 })

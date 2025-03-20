@@ -10,8 +10,8 @@ const useGetMessages = () => {
 		const getMessages = async () => {
 			setLoading(true);
 			try {
-				const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-				const res = await fetch(`${backendUrl}/api/messages/${selectedConversation._id}`, {
+				// const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"
+				const res = await fetch(`/api/messages/${selectedConversation._id}`, {
 					credentials: "include"
 				});
 				const data = await res.json();

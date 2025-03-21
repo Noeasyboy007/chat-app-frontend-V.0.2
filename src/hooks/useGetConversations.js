@@ -9,8 +9,8 @@ const useGetConversations = () => {
 		const getConversations = async () => {
 			setLoading(true);
 			try {
-				// const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"
-				const res = await fetch(`/api/users`, {
+				const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"
+				const res = await fetch(`${backendUrl}/api/users`, {
 					credentials: "include"
 				});
 				const data = await res.json();

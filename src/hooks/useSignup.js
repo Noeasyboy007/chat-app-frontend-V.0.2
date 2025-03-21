@@ -12,8 +12,8 @@ const useSignup = () => {
 
 		setLoading(true);
 		try {
-			// const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"
-			const res = await fetch(`/api/auth/signup`, {
+			const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"
+			const res = await fetch(`${backendUrl}/api/auth/signup`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ first_name, last_name, email, username, password, confirmPassword, gender }),

@@ -3,11 +3,14 @@ import useGetMessages from "../../hooks/useGetMessages";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
 import useListenMessages from "../../hooks/useListenMessages";
+import useConversation from "../../zustand/useConversation";
 
 const Messages = () => {
 	const { messages, loading } = useGetMessages();
+	const { replyToMessage } = useConversation();
 	useListenMessages();
 	const lastMessageRef = useRef();
+	const messagesContainerRef = useRef();
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -15,8 +18,16 @@ const Messages = () => {
 		}, 100);
 	}, [messages]);
 
+	// Adjust scroll position when replying to a message
+	useEffect(() => {
+		if (replyToMessage && messagesContainerRef.current) {
+			const container = messagesContainerRef.current;
+			container.scrollTop = container.scrollHeight;
+		}
+	}, [replyToMessage]);
+
 	return (
-		<div className='px-4 flex-1 overflow-auto'>
+		<div className='px-4 flex-1 overflow-auto' ref={messagesContainerRef}>
 			{!loading &&
 				messages.length > 0 &&
 				messages.map((message) => (

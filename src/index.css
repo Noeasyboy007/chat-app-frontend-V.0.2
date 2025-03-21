@@ -59,3 +59,43 @@ body {
 		transform: translate3d(4px, 0, 0);
 	}
 }
+
+/* Reply feature styles */
+.group:hover .opacity-0 {
+	opacity: 1;
+}
+
+.transition-opacity {
+	transition: opacity 0.2s ease-in-out;
+}
+
+/* Fix for long text overflow */
+.chat-bubble {
+	word-break: break-word;
+	overflow-wrap: break-word;
+	max-width: 80%;
+	white-space: pre-wrap;
+}
+
+/* Ensure the chat container doesn't overflow */
+.chat {
+	max-width: 100%;
+	overflow: hidden;
+}
+
+/* Improve reply button visibility */
+.chat .reply-button {
+	z-index: 10;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.chat:hover .reply-button {
+	opacity: 0.9 !important;
+}
+
+/* Add a subtle glow effect on hover */
+.reply-button:hover {
+	box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+	transform: scale(1.1);
+	transition: all 0.2s ease;
+}

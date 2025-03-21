@@ -6,7 +6,7 @@ const useSendMessage = () => {
 	const [loading, setLoading] = useState(false);
 	const { messages, setMessages, selectedConversation } = useConversation();
 
-	const sendMessage = async (message) => {
+	const sendMessage = async (message, replyToId = null) => {
 		setLoading(true);
 		try {
 			const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"
@@ -15,8 +15,8 @@ const useSendMessage = () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ message }),
 				credentials: "include",
+				body: JSON.stringify({ message, replyTo: replyToId }),
 			});
 			const data = await res.json();
 			if (data.error) throw new Error(data.error);
@@ -29,6 +29,6 @@ const useSendMessage = () => {
 		}
 	};
 
-	return { sendMessage, loading };
+	return { loading, sendMessage };
 };
 export default useSendMessage;
